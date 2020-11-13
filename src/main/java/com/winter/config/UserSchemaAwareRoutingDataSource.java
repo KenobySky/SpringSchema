@@ -52,18 +52,18 @@ public class UserSchemaAwareRoutingDataSource extends AbstractDataSource {
     }
 
     private DataSource buildDataSourceForSchema(String schema) {
-        System.out.println("schema:" + schema);
-        
-        String url = env.getRequiredProperty("spring.datasource.url");
+        logger.info("building datasource with schema " + schema);
+
+        String url = env.getRequiredProperty("companydatasource.url");
         //url = url.replace("/winter_web", "");
         //url = url + "/" + schema;
-        
-        String username = env.getRequiredProperty("spring.datasource.username");
-        String password = env.getRequiredProperty("spring.datasource.password");
+
+        String username = env.getRequiredProperty("companydatasource.username");
+        String password = env.getRequiredProperty("companydatasource.password");
 
 
-        DataSource build = (DataSource) DataSourceBuilder.create()
-                .driverClassName(env.getRequiredProperty("spring.datasource.driver-class-name"))
+        DataSource build = DataSourceBuilder.create()
+                .driverClassName(env.getRequiredProperty("companydatasource.driver-class-name"))
                 .username(username)
                 .password(password)
                 .url(url)
@@ -84,13 +84,24 @@ public class UserSchemaAwareRoutingDataSource extends AbstractDataSource {
 
     private DataSource determineTargetDataSource() {
         try {
-            Usuario usuario = usuarioProvider.customUserDetails(); // request scoped answer!
-            String db_schema = usuario.getTunnel().getDb_schema();
+            String db_schema = determineTargetSchema();
+            logger.info("using schema " + db_schema);
             return dataSources.get(db_schema);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            throw new RuntimeException(ex);
         }
-        return null;
+    }
+
+    private String determineTargetSchema() {
+        try {
+            Usuario usuario = usuarioProvider.customUserDetails(); // request scoped answer!
+            return usuario.getTunnel().getDb_schema();
+        } catch (RuntimeException e) {
+            // This shouldn't be necessary, since we are planning to use a pre-initialized database.
+            // And there should only be usages of this DataSource in a logged-in situation
+            logger.info("usario not present, falling back to default schema", e);
+            return "default_company_schema";
+        }
     }
 
     @Override
