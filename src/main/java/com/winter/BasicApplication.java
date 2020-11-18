@@ -10,3 +10,5 @@ public class BasicApplication {
 		SpringApplication.run(BasicApplication.class, args);
 	}
 }
+
+// https://vladmihalcea.com/why-you-should-never-use-the-table-identifier-generator-with-jpa-and-hibernate/

@@ -2,6 +2,7 @@ package com.winter.model.login;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -25,7 +26,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class Usuario implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue
     @SequenceGenerator(name = "usuario", sequenceName = "usuarios")
     @Column(name = "idUsuario", updatable = false, nullable = false)
     private int idUsuario;
@@ -44,7 +45,7 @@ public class Usuario implements UserDetails {
 
     private boolean allowAccess = true;
 
-    @ManyToOne()
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "idTunnel", nullable = false, updatable = false)
     private Tunnel tunnel;
 
@@ -63,7 +64,7 @@ public class Usuario implements UserDetails {
         return allowAccess;
     }
 
-   
+
 
     public void setAllowAccess(boolean allowAccess) {
         this.allowAccess = allowAccess;
@@ -111,7 +112,7 @@ public class Usuario implements UserDetails {
         this.nomeCompleto = nomeCompleto;
     }
 
-    
+
 
     @Override
     public String toString() {
@@ -155,6 +156,10 @@ public class Usuario implements UserDetails {
 
     public Tunnel getTunnel() {
         return tunnel;
+    }
+
+    public void setTunnel(Tunnel tunnel) {
+        this.tunnel = tunnel;
     }
 
 }

@@ -10,11 +10,21 @@ import org.springframework.web.context.WebApplicationContext;
 
 /**
  *
- * @author 
+ * Set up for Spring the The identity of the principal being authenticated;
  */
 @Configuration
 public class UsuarioProvider {
 
+    /**
+     * 
+     * https://docs.spring.io/spring-framework/docs/3.0.0.M3/reference/html/ch04s04.html
+     * 
+     * SCOPE_REQUEST = Per HTTP request
+     * 
+     * SCOPEDPROXYMODE = Create a class-based proxy (uses CGLIB)
+     * 
+     * @return 
+     */
     @Bean
     @Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS) // or just @RequestScope
     public Usuario customUserDetails() {

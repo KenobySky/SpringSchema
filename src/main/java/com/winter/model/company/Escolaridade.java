@@ -5,18 +5,16 @@ import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-
 
 @Entity
 @Table(name = "escolaridade")
 public class Escolaridade implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue
     @SequenceGenerator(name = "escolaridade", sequenceName = "")
     @Column(name = "id", updatable = false, nullable = false)
     private int id;
@@ -77,7 +75,5 @@ public class Escolaridade implements Serializable {
         }
         return true;
     }
-    
-    
 
 }

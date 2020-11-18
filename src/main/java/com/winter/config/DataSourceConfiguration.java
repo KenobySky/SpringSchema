@@ -8,11 +8,17 @@ import org.springframework.core.env.Environment;
 
 /**
  *
- * @author 
+ * Set up the Data Source Configuration.
+ * This class Initializes the beans: loginDataSource and companyDependentDataSource;
  */
 @Configuration
 public class DataSourceConfiguration {
 
+    /**
+     * Uses the default setting from the application.properties.
+     * @param env
+     * @return 
+     */
     @Bean(name = "loginDataSource")
     public DataSource loginDataSource(Environment env) {
         String url = env.getRequiredProperty("spring.datasource.url");
@@ -29,6 +35,11 @@ public class DataSourceConfiguration {
                 .build();
     }
 
+    /**
+     * 
+     * @param env
+     * @return 
+     */
     @Bean(name = "companyDependentDataSource")
     public DataSource companyDependentDataSource(Environment env) {
         return new UserSchemaAwareRoutingDataSource(); // Autowiring is done afterwards by Spring
